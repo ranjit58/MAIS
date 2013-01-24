@@ -132,11 +132,13 @@ fi
 if [ $ANALYSIS_STEPS -eq 123 ] || [ $ANALYSIS_STEPS -eq 23 ] || [ $ANALYSIS_STEPS -eq 2 ] ; then
 echo "steps 2";
 
+echo -e "#---------------------Align/filter/tree--------------------#\n">>script.sh
 
-echo '#Analysis Step 2'>>script.sh
-echo 'align_seqs.py -i seqs.fna_rep_set.fasta -e 50 -v'>>script.sh
+echo -e "#Analysis Step 2\n">>script.sh
+echo 'align_seqs.py -i seqs.fna_rep_set.fasta -e 80 -v'>>script.sh
 echo 'filter_alignment.py -i pynast_aligned/seqs.fna_rep_set_aligned.fasta -v -o filtered_alignment'>>script.sh
 echo 'make_phylogeny.py -i filtered_alignment/seqs.fna_rep_set_aligned_pfiltered.fasta -v -o phylogeny.tre'>>script.sh
+echo -e "#'''''''''''''''''''''''''''''''''''''''''''''''''''#\n">>script.sh
 
 else
 echo "Step 2 not found";
@@ -146,12 +148,44 @@ fi
 if [ $ANALYSIS_STEPS -eq 123 ] || [ $ANALYSIS_STEPS -eq 23 ] || [ $ANALYSIS_STEPS -eq 3 ]; then
 echo "steps 3";
 
-echo '#Analysis Step 3'>>script.sh
-echo 'alpha_diversity.py -i otu_table.biom -o alpha_div_matrices -m chao1,observed_species,PD_whole_tree,shannon,simpson -t phylogeny.tre'>>script.sh
-echo "alpha_diversity:metrics shannon,simpson,PD_whole_tree,chao1,observed_species" > alpha_params.txt
-echo 'alpha_rarefaction.py -i otu_table.biom -p alpha_params.txt -m mapping.txt -o alpha_rarefac -v -t phylogeny.tre'>>script.sh
-echo 'beta_diversity_through_plots.py -i otu_table.biom -m mapping.txt -o beta_div -v -t phylogeny.tre'>>script.sh
-#echo 'jackknifed_beta_diversity.py -i otu_table.txt -m mapping.txt -o beta_jacknife -e 150000 -a -t phylogeny.tre'>>script.sh
+echo -e "#Analysis Step 3\n">>script.sh
+
+echo -e "#---------------------Alpha div---------------------#\n">>script.sh
+
+echo '# calculate the alpha div for given matrices : chao1,observed_species,PD_whole_tree,shannon,simpson'>>script.sh
+echo -e "alpha_diversity.py -i otu_table.biom -o alpha_div.txt -m chao1,observed_species,PD_whole_tree,shannon,simpson -t phylogeny.tre\n">>script.sh
+
+echo "# Create a parameters files and run alpha diversity through plots">>script.sh
+echo 'echo "alpha_diversity:metrics shannon,simpson,PD_whole_tree,chao1,observed_species" > alpha_params.txt'>>script.sh
+echo -e "alpha_rarefaction.py -i otu_table.biom -p alpha_params.txt -m mapping.txt -o alpha_rarefac -v -t phylogeny.tre\n">>script.sh
+
+echo -e "#'''''''''''''''''''''''''''''''''''''''''''''''''''#\n">>script.sh
+
+
+echo -e "#---------------------Beta div---------------------#\n">>script.sh
+
+echo '# calculate beta div values for given three matrices : bray_curtis,unweighted_unifrac,weighted_unifrac'>>script.sh
+echo -e "beta_diversity.py -i otu_table_keep_even.biom -m bray_curtis,unweighted_unifrac,weighted_unifrac -o beta_div_matrices_keep -t phylogeny.tre\n">>script.sh
+
+echo '#create a rarified OTU table (usually select the sample size lowest among all the samples)'>>script.sh
+echo "#replace the -d number with your choice (otherwise default minimum called "EVEN" is calculated from otu_table.stats">>script.sh
+EVEN=$(cat otu_table.stats |head -13|tail -1|cut -d : -f 2|cut -d . -f 1| cut -d ' ' -f 2)
+echo -e "single_rarefaction.py -i otu_table.biom -o otu_table_even.biom -d $EVEN\n">>script.sh
+
+echo '#Create a parameters files and run beta diversity through plots'>>script.sh
+echo 'echo "beta_diversity:metrics  bray_curtis,unweighted_unifrac,weighted_unifrac" > beta_params.txt'>>script.sh
+echo -e "beta_diversity_through_plots.py -i otu_table_even.biom -m mapping.txt -p beta_params.txt -o beta_div_even -v -t phylogeny.tre\n">>script.sh
+
+echo -e "#'''''''''''''''''''''''''''''''''''''''''''''''''''#\n">>script.sh
+
+
+
+echo -e "#---------------------Jack Knife---------------------#\n">>script.sh
+
+echo "#for jacknife the value for -e should be 75% of $EVEN">>script.sh
+let EVEN_JACK=$EVEN*75/100
+echo -e "#jackknifed_beta_diversity.py -i otu_table.txt -m mapping.txt -o beta_jacknife -e $EVEN_JACK -t phylogeny.tre\n">>script.sh
+echo -e "#''''''''''''''''''''''''''''''''''''''''''''''''''''#\n">>script.sh
 
 
 else

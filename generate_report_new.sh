@@ -7,9 +7,146 @@ mkdir report_files
 #cp -r beta_div/ report/beta_div
 #cp alpha_div_matrices report/alpha_div_matrices.txt
 #cp otu_table.stats report/otu_table.stats 
-cp ~/workdir/my-scripts/cheaha/arrow.png report_files/
-cp ~/workdir/my-scripts/cheaha/open-in-new-window.gif report_files/oinw.gif
-cp ~/workdir/my-scripts/cheaha/q.jpg report_files/
+cp ~/my-scripts/MAIS/arrow.png report_files/
+cp ~/my-scripts/MAIS/open-in-new-window.gif report_files/oinw.gif
+cp ~/my-scripts/MAIS/q.jpg report_files/
+
+
+
+
+#----------Start:Report Overview-------------------#
+cat <<EOF >microbiome_report_temp.html
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="content-type">
+  <title>microbiome_results</title>
+</head>
+<body
+ style="background-color: white; width: 1200px; color: rgb(0, 0, 0);"
+ alink="#ee0000" link="#0000ee" vlink="#551a8b">
+&nbsp;
+<h1
+ style="text-align: center; font-weight: normal; margin-left: 40px; color: white; background-color: rgb(102, 102, 102);"><a
+ name="Index"></a>Microbiome
+Analysis Results</h1>
+<br><div style="margin-left: 40px;">
+<h2><span style="font-weight: normal;">Index</span></h2>
+</div>
+<ol style="margin-left: 40px; background-color: white;">
+  <li style="width: 1200px;"><a href="report_files/initial_overview.html">Initial Sequence Overview</a></li>
+  <li style="width: 1200px;"><a href="report_files/quality_control.html">Quality Control</a></li>
+  <li style="width: 1200px;"><a href="report_files/sample_mapping.html">Sample selected for analysis and mapping information</a></li>
+  <li style="width: 1200px;"><a href="report_files/summarize_taxonomy.html">Summarize OTUs by Taxonomic distrubution</a></li>
+  <li style="width: 1200px;"><a href="report_files/alpha_diversity.html">Diversity within a sample (Alpha Diversity)</a></li>
+  <li style="width: 1200px;"><a href="report_files/beta_diversity.html">Diversity between samples (Beta Diversity)</a></li>
+  <li style="width: 1200px;"><a href="report_files/advance_analysis.html">Further advanced analysis and statistical tests</a></li>
+  <li style="width: 1200px;"><a href="report_files/references_faqs.html">References and FAQs</a></li>
+</ol>
+<br>
+<div style="margin-left: 40px;">
+<img style="width: 32px; height: 32px;" alt=""
+ src="report_files/arrow.png" align="middle"> &nbsp;This icon
+brings you to the top index page.<br>
+<img style="width: 35px; height: 35px;" alt=""
+ src="report_files/q.jpg" align="middle"> This will open the help
+page for that topic (if any)<br>
+<img style="width: 35px; height: 35px;" alt=""
+ src="report_files/oinw.gif" align="middle"> This
+will open the webpage or graphs in a new browser tab/window<br>
+</div>
+<br>
+<br>
+
+EOF
+
+cat <<EOF >microbiome_report.html
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<!-- saved from url=(0105)microbiome_report.html -->
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=ISO-8859-1">
+  <title>microbiome_results</title>
+</head>
+<body
+ style="background-color: white; width: 1200px; color: rgb(0, 0, 0);"
+ alink="#ee0000" link="#0000ee" vlink="#551a8b">
+<span style="font-family: Verdana;">&nbsp;
+</span>
+<h1
+ style="text-align: center; font-weight: normal; margin-left: 40px; color: white; background-color: rgb(102, 102, 102); font-family: Verdana;"><a
+ name="Index"></a>Microbiome
+Analysis Results</h1>
+<br style="font-family: Verdana;">
+<div style="margin-left: 40px; font-family: Verdana;">
+<h2><span style="font-weight: normal;">Index</span></h2>
+</div>
+<ol style="margin-left: 40px; font-family: Verdana;">
+  <li>
+    <p><a target="_blank" 
+ href="report_files/initial_overview.html">Initial
+Sequence Overview</a></p>
+  </li>
+  <li>
+    <p><a target="_blank" 
+ href="report_files/quality_control.html">Quality
+Control</a></p>
+  </li>
+  <li>
+    <p><a target="_blank" 
+ href="report_files/sample_mapping.html">Sample
+selected for analysis and mapping information</a></p>
+  </li>
+  <li>
+    <p><a target="_blank" 
+ href="report_files/summarize_taxonomy.html">Summarize
+OTUs by Taxonomic distrubution</a></p>
+  </li>
+  <li>
+    <p><a target="_blank" 
+ href="report_files/alpha_diversity.html">Diversity
+within a sample (Alpha Diversity)</a></p>
+  </li>
+  <li>
+    <p><a target="_blank" 
+ href="report_files/beta_diversity.html">Diversity
+between samples (Beta Diversity)</a></p>
+  </li>
+  <li>
+    <p><a target="_blank" 
+ href="report_files/advance_analysis.html">Further
+advanced analysis and statistical tests</a></p>
+  </li>
+  <li>
+    <p><a target="_blank"
+ href="report_files/references_faqs.html">References
+and FAQs</a></p>
+  </li>
+</ol>
+<ol
+ style="margin-left: 40px; background-color: white; font-family: Verdana;">
+</ol>
+<br style="font-family: Verdana;">
+<div style="margin-left: 40px; font-family: Verdana;">
+<img style="width: 35px; height: 35px;" alt=""
+ src="report_files/q.jpg" align="middle">
+This will open the help
+page for that topic (if any)<br>
+<img style="width: 35px; height: 35px;" alt=""
+ src="report_files/oinw.gif" align="middle">
+This
+will open the webpage or graphs in a new browser tab/window<br>
+</div>
+<br style="font-family: Verdana;">
+<br style="font-family: Verdana;">
+</body>
+</html>
+EOF
+#----------End:Report Overview-------------------#
+
+
 
 #----------Start:Initial Sequencing Overview-------------------#
 
@@ -220,7 +357,7 @@ cat <<EOF >report_files/sample_mapping.html
       <td style="color: white;">
       <h2
  style="background-color: rgb(102, 102, 102); font-weight: normal;"><a
- name="Sample seleted for analysis and mapping information"></a> &nbsp; Sample seleted for analysis and mapping information</h2>
+ name="Sample selected for analysis and mapping information"></a> &nbsp; Sample seleted for analysis and mapping information</h2>
       </td>
     </tr>
   </tbody>
@@ -284,7 +421,7 @@ cat <<EOF >report_files/summarize_taxonomy.html
 <head>
   <meta content="text/html; charset=ISO-8859-1"
  http-equiv="content-type">
-  <title>Sample selected and mapping information</title>
+  <title>Summarize OTUs by Taxonomic distrubution</title>
 </head>
 <body
  style="background-color: white; width: 1200px; color: rgb(0, 0, 0);"
@@ -301,7 +438,7 @@ cat <<EOF >report_files/summarize_taxonomy.html
       <td style="color: white;">
       <h2
  style="background-color: rgb(102, 102, 102); font-weight: normal;"><a
- name="Summarize taxonomies by Taxonomic distrubution"></a> &nbsp; Summarize taxonomies by Taxonomic distrubution</h2>
+ name="Summarize OTUs by Taxonomic distrubution"></a> &nbsp; Summarize taxonomies by Taxonomic distrubution</h2>
       </td>
     </tr>
   </tbody>
@@ -351,8 +488,19 @@ distribution &nbsp;<a
 <br>
 <br>
 <br>
-</div>
 
+
+
+<br></br></br>
+Dowload the raw dataset used for generating Taxonomy plots (tab delimited format, right click -> save link as)<br>
+<ol>
+  <li> <a href="../taxa_summary/otu_table_L2.txt" target="_blank">OTU table Level2</a> </li>
+  <li> <a href="../taxa_summary/otu_table_L3.txt" target="_blank">OTU table Level3</a> </li>
+  <li> <a href="../taxa_summary/otu_table_L4.txt" target="_blank">OTU table Level4</a> </li>
+  <li> <a href="../taxa_summary/otu_table_L5.txt" target="_blank">OTU table Level5</a> </li>
+  <li> <a href="../taxa_summary/otu_table_L6.txt" target="_blank">OTU table Level6</a> </li>  
+</ol>
+</div>
 EOF
 #----------End:Summarize taxonomy ------------------------------#
 
@@ -400,10 +548,10 @@ commonly used matrices to measure the diversity.They are<br>
   <li>Simpson</li>
   <li>PD_whole_tree (include phylogeny).</li>
 </ol>
-A martix file having the alpha diversity values for all five matrices
-for all samples can be downloaded <a href="../alpha_div_matrices.txt">here</a>. [The file is tab delimited and can be viewed in
+Alpha divesity was calculated for all diversity matrices mentioned above and organised in form of a table (column represent different diversity matrice and rows represent sample name).</br></br>
+<b> <a href="../alpha_div.txt">Download</a></b> the alpha diversity calculations. [The file is tab delimited and can be viewed in
 excel]<br>
-<br>
+<br><br><br>
 <span style="font-weight: bold; color: rgb(153, 0, 0);">Rarefaction
 curve</span>
 - Rarefaction curves plot the number of individuals sampled versus the
@@ -446,7 +594,7 @@ EOF
 #----------Start:Beta Diversity--------------------------------#
 
 
-cat <<EOF >report_files/beta_diversity.html
+cat <<EOF >report_files/beta_diversity_old.html
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
@@ -484,10 +632,8 @@ many
 samples (for example 3 control and 3 treatment), a beta diversity
 metric will return a matrix of the distances of all samples to all
 other samples. <br>
-There are different types of matrices which can be used to measure
-diversity like bray-curtis, unifrac etc.<br>
+Here three different types of matrices (bray-curtis,unweighted unifrac, weighted unifrac were used to measure beta diversity.<br>
 <br>
-Here we have used the UniFrac matrix to calculate the beta diversity.
 UniFrac is a method to calculate a distance measure between bacterial
 communities using phylogenetic information. The method can be used in
 two modes.<br>
@@ -554,6 +700,163 @@ permission if asked]<br>
 EOF
 
 
+cat <<EOF >report_files/beta_diversity.html
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="content-type">
+  <title>Sample selected and mapping information</title>
+</head>
+<body
+ style="background-color: white; width: 1200px; color: rgb(0, 0, 0);"
+ alink="#ee0000" link="#0000ee" vlink="#551a8b">
+<span style="font-family: Verdana;"></span><br
+ style="font-family: Verdana;">
+<br style="font-family: Verdana;">
+<div style="margin-left: 40px; font-family: Verdana;"><span
+ style="color: black;"></span>
+<table style="text-align: left; width: 1160px; height: 54px;"
+ border="0" cellpadding="0" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style="color: white;">
+      <h2
+ style="background-color: rgb(102, 102, 102); font-weight: normal;"><a
+ name="Diversity between samples (Beta Diversity)"></a>&nbsp;
+Diversity between samples (Beta Diversity)</h2>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<span style="color: rgb(153, 0, 0); font-weight: bold;">Beta
+diversity</span>
+is a term for the comparison of samples to each other. A beta diversity
+metric does not calculate a value for each sample. Rather, it
+calculates a distance between a pair of samples. &nbsp;If you have
+many
+samples (for example 3 control and 3 treatment), a beta diversity
+metric will return a matrix of the distances of all samples to all
+other samples. <br>
+Here three different matrices are used (bray-curtis, unweighted unifrac and weighted unnifrac) to measure
+diversity.<br>
+UniFrac is a method to calculate a distance measure between bacterial
+communities using phylogenetic information. The method can be used in
+two modes. Un-weighted (Qualitative) unifrac depends upon&nbsp;the
+present and absence of OTUs between samples and their phylogenetic
+distances. Weighted (Qualitative) unifrac includes the abundance
+information alongwith the presence and absence of OTUs between samples
+and their phylogenetic distances.
+<ol>
+</ol>
+Beta divesity was calculated for all three diversity matrices mentioned
+above and organised in form of a table (column represent different
+diversity matrice and rows represent sample name).<br>
+<br style="color: rgb(102, 0, 0);">
+<span style="font-weight: bold; color: rgb(153, 0, 0);">Results
+in tabular format</span> [The files are tab delimited and can be viewed using excel]
+<span style="text-decoration: underline;"><span
+ style="font-weight: bold;"></span></span><br>
+<ol>
+  <li><a href="../beta_div_even/bray_curtis_otu_table_even.txt">Bray-curtis
+diversity</a></li>
+  <li><a
+ href="../beta_div_even/unweighted_unifrac_otu_table_even.txt">Unweighted
+Unifrac</a></li>
+  <li><a
+ href="../beta_div_even/weighted_unifrac_otu_table_even.txt">Weighted
+Unifrac</a></li>
+</ol>
+<br style="color: rgb(153, 0, 0);"></br></br>
+<span style="font-weight: bold; color: rgb(153, 0, 0);">Principal
+Coordinate analysis (PCoA)</span><br>
+<br>
+Here principle coordinate analysis (PCoA) are used to vizualize
+the distances between the sample. PCoA are used to vizualize
+the distances between the samples in a 2D plot and 3D plot. In the table "dm" stands for distance matrix and "pc" stands for principal component file used for generating plots. Both 2D and 3D plots are calculated as continuous and discrete. 3D plot requires JAVA.<br>
+<br>
+<table style="text-align: left; width: 100%;" border="1"
+ cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="font-weight: bold;">Beta Diversity
+matrices (dm pc)</td>
+      <td style="font-weight: bold;">2D plot (Continuous)</td>
+      <td style="font-weight: bold;">2D plot (Discrete)</td>
+      <td style="font-weight: bold;">3D plot (Continuous)</td>
+      <td style="font-weight: bold;">3D plot (Discrete)</td>
+    </tr>
+    <tr>
+      <td>Bray-Curtis ( <a
+ href="../beta_div/bray_curtis_dm.txt" target="_blank">dm</a>
+&nbsp;<a href="../beta_div/bray_curtis_pc.txt"
+ target="_blank">pc</a> )</td>
+      <td style="text-align: center;"><a
+ href="../beta_div/bray_curtis_2d_continuous/bray_curtis_pc_2D_PCoA_plots.html"
+ target="_blank">Link</a></td>
+      <td style="text-align: center;"><a
+ href="../beta_div/bray_curtis_2d_discrete/bray_curtis_pc_2D_PCoA_plots.html"
+ target="_blank">Link</a></td>
+      <td style="text-align: center;"><a
+ href="../beta_div/bray_curtis_3d_continuous/bray_curtis_pc_3D_PCoA_plots.html"
+ target="_blank">Link</a></td>
+      <td style="text-align: center;"><a
+ href="../beta_div/bray_curtis_3d_discrete/bray_curtis_pc_3D_PCoA_plots.html"
+ target="_blank">Link</a></td>
+    </tr>
+
+<tr>
+      <td>Unweighted Unifrac Analysis ( <a
+ href="../beta_div/unweighted_unifrac_dm.txt" target="_blank">dm</a>
+      <a href="../beta_div/unweighted_unifrac_pc.txt"
+ target="_blank">pc</a> )</td>
+      <td style="text-align: center;"><a
+ href="../beta_div/unweighted_unifrac_2d_continuous/unweighted_unifrac_pc_2D_PCoA_plots.html"
+ target="_blank">Link</a></td>
+      <td style="text-align: center;"><a
+ href="../beta_div/unweighted_unifrac_2d_discrete/unweighted_unifrac_pc_2D_PCoA_plots.html"
+ target="_blank">Link</a></td>
+      <td style="text-align: center;"><a
+ href="../beta_div/unweighted_unifrac_3d_continuous/unweighted_unifrac_pc_3D_PCoA_plots.html"
+ target="_blank">Link</a></td>
+      <td style="text-align: center;"><a
+ href="../beta_div/unweighted_unifrac_3d_discrete/unweighted_unifrac_pc_3D_PCoA_plots.html"
+ target="_blank">Link</a></td>
+    </tr>
+    <tr>
+      <td>Weighted Unifrac Analysis (<a
+ href="../beta_div/weighted_unifrac_dm.txt" target="_blank">dm</a>
+      <a href="../beta_div/weighted_unifrac_pc.txt"
+ target="_blank">pc</a> )</td>
+      <td style="text-align: center;"><a
+ href="../beta_div/weighted_unifrac_2d_continuous/weighted_unifrac_pc_2D_PCoA_plots.html"
+ target="_blank">Link</a></td>
+      <td style="text-align: center;"><a
+ href="../beta_div/weighted_unifrac_2d_discrete/weighted_unifrac_pc_2D_PCoA_plots.html"
+ target="_blank">Link</a></td>
+      <td style="text-align: center;"><a
+ href="../beta_div/weighted_unifrac_3d_continuous/weighted_unifrac_pc_3D_PCoA_plots.html"
+ target="_blank">Link</a></td>
+      <td style="text-align: center;"><a
+ href="../beta_div/weighted_unifrac_3d_discrete/weighted_unifrac_pc_3D_PCoA_plots.html"
+ target="_blank">Link</a></td>
+    </tr>
+
+  </tbody>
+</table>
+&nbsp;<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+</div>
+</body>
+</html>
+EOF
 #----------End:Beta Diversity--------------------------------#
 
 
