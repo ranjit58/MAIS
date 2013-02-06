@@ -1,4 +1,4 @@
-#qc1.sh
+qc1.sh
 cd fastqc_beforeqc/
 getqc-stats-all.sh
 fastqcplot.sh

@@ -27,7 +27,6 @@ ANALYSIS_NAME=$1
 RAM=$2
 #specify time in hr as 1/2/8/10 etc
 TIME=$3
-ANALYSIS_STEPS=$4 # PICK 1/2/3 FOR OTU-ANALYSIS/ALIGN/DIVERSITY 123 OR 12 OR 23 OR 123 OR 1 OR 2 OR 3
 RDP_CUTOFF=0.5    #USE 0.8 FOR 454 SEQUENCES
 
 ###########################################################
@@ -102,103 +101,71 @@ echo 'sh script.sh'>>cluster.job
 
 echo '### script file to be used to submit job on cluster ###' >script.sh
 
-if [ $ANALYSIS_STEPS -eq 1 ] || [ $ANALYSIS_STEPS -eq 12 ] || [ $ANALYSIS_STEPS -eq 123 ] ; then
-echo "steps 1";
-
 echo '#Analysis Step 1'>>script.sh
+echo '#------------------------- Pick OTUs ----------------------------------------------'>>script.sh
+echo '#pick_otus.py -i seqs.fna -s 0.97 -v'>>script.sh
 echo 'pick_otus.py -i seqs.fna -s 1 -v'>>script.sh
+
+echo '#------------------------- Pick representative of OTUs ----------------------------'>>script.sh
 echo 'pick_rep_set.py -i uclust_picked_otus/seqs_otus.txt -v -m most_abundant -l uclust_picked_otus/pick_rep_seq.log -f seqs.fna'>>script.sh
+
+
+echo '#------------------------- Create temp OTU table (without taxonomy) ----------------------------'>>script.sh
+echo 'make_otu_table.py -i uclust_picked_otus/seqs_otus.txt -v -o otu_table.biom'>>script.sh
+
+
+echo '#------------------------- Filter OTUs ----------------------------'>>script.sh
+echo '# To turn off OTU filterring just comment all the commands in this block'>>script.sh
+echo '# Filter OTUs which has total abundunce of less than 10 reads. Then fix the fasta file pick_rep_set.py'>>script.sh
+echo '#After creating filtered OTU and fasta file, we just replace them with the original'>>script.sh
+echo 'filter_otus_from_otu_table.py -i otu_table.biom -o otu_table_fil_n10.biom -n 10'>>script.sh
+echo 'filter_fasta.py -f seqs.fna_rep_set.fasta -o seqs.fna_rep_set_fil_n10.fasta -b otu_table_fil_n10.biom'>>script.sh
+echo 'mv seqs.fna_rep_set.fasta seqs.fna_rep_set_org.fasta'>>script.sh
+echo 'mv seqs.fna_rep_set_fil_n10.fasta seqs.fna_rep_set.fasta'>>script.sh
+echo 'rm otu_table.biom otu_table_fil_n10.biom'>>script.sh
+
+echo '#------------------------- Assign taxonomy using RDP and create OTU table ---------'>>script.sh
 echo "#assign_taxonomy.py -i seqs.fna_rep_set.fasta -v -c $RDP_CUTOFF">>script.sh
 echo '#make_otu_table.py -i uclust_picked_otus/seqs_otus.txt -v -t rdp22_assigned_taxonomy/seqs.fna_rep_set_tax_assignments.txt -o otu_table_unsorted.biom'>>script.sh
+
+echo '#-------------------------Assign taxonomy using BLAST and create OTU table --------'>>script.sh
 echo "#---setting for blast searches---">>script.sh
 echo "cp $QIIME../gg_12_10_otus/rep_set/97_otus.fasta .">>script.sh
 echo "assign_taxonomy.py -i seqs.fna_rep_set.fasta -v -m blast -r 97_otus.fasta">>script.sh
 echo "rm 97_otus.fasta">>script.sh
 echo "#---setting ends for blast searches---">>script.sh
-echo 'make_otu_table.py -i uclust_picked_otus/seqs_otus.txt -v -t blast_assigned_taxonomy/seqs.fna_rep_set_tax_assignments.txt -o otu_table_unsorted.biom'>>script.sh
-echo 'sort_otu_table.py -s SampleID -m mapping.txt -i otu_table_unsorted.biom -o otu_table.biom'>>script.sh
+echo 'make_otu_table.py -i uclust_picked_otus/seqs_otus.txt -v -t blast_assigned_taxonomy/seqs.fna_rep_set_tax_assignments.txt -o otu_table_org.biom'>>script.sh
+echo 'filter_otus_from_otu_table.py -i otu_table_org.biom -o otu_table_fil_n10_unsorted.biom -n 10'>>script.sh
+
+echo '#------------------------- Sort OTU table -----------------------------------------'>>script.sh
+echo '#Sort ysing sample ID'>>script.sh
+echo 'sort_otu_table.py -s SampleID -m mapping.txt -i otu_table_fil_n10_unsorted.biom -o otu_table.biom'>>script.sh
 echo '#To enable the sorting based on external file, create a file sample_order.txt (containing all sample ids) and enable the next line code and disable the previous line code'>>script.sh
-echo '#sort_otu_table.py -i otu_table_unsorted.biom -o otu_table.biom -l sample_order.txt'>>script.sh
+echo '#sort_otu_table.py -i otu_table_fil_n10_unsorted.biom -o otu_table.biom -l sample_order.txt'>>script.sh
+
+
+
+echo '#------------------------- OTU table statistics -----------------------------------'>>script.sh
 echo 'per_library_stats.py -i otu_table.biom > otu_table.stats'>>script.sh
-echo 'summarize_taxa_through_plots.py -i otu_table.biom -m mapping.txt -v -o taxa_summary'>>script.sh
+
+
+echo '#------------------------- Summarizing taxa information ---------------------------'>>script.sh
+echo '#summarize_taxa_through_plots.py -i otu_table.biom -m mapping.txt -v -o taxa_summary'>>script.sh
+echo 'summarize_taxa.py -i otu_table.biom -o taxa_summary'>>script.sh
+echo 'plot_taxa_summary.py -i taxa_summary/otu_table_L2.txt,taxa_summary/otu_table_L3.txt,taxa_summary/otu_table_L4.txt,taxa_summary/otu_table_L5.txt,taxa_summary/otu_table_L6.txt -o taxa_summary/taxa_summary_plots/ -l Phylum,Class,Order,Family,Genus -d 300 -c bar,area'>>script.sh
+
+echo '#------------------------- Summarizing taxa information (trimmed version)-----------'>>script.sh
+echo '#This will trim any OTU which has overall abundance less than 0.1%'>>script.sh
+echo 'summarize_taxa.py -i otu_table.biom -o taxa_summary_trim -u 0.001'>>script.sh
+echo 'plot_taxa_summary.py -i taxa_summary_trim/otu_table_L2.txt,taxa_summary_trim/otu_table_L3.txt,taxa_summary_trim/otu_table_L4.txt,taxa_summary_trim/otu_table_L5.txt,taxa_summary_trim/otu_table_L6.txt -o taxa_summary_trim/taxa_summary_plots/ -l Phylum,Class,Order,Family,Genus -d 300 -c bar,area'>>script.sh
+
+echo '#------------------------- Create OTU Heatmap ------------------------------'>>script.sh
 echo '#make_otu_heatmap_html.py -i otu_table.biom -o OTU_Heatmap/'>>script.sh
+
+echo '#------------------------- Create OTU Network ------------------------------'>>script.sh
 echo '#make_otu_network.py -m mapping.txt -i otu_table.biom -o OTU_Network'>>script.sh
+
+echo '#------------------------- Convert BIOM file to TXT file--------------------'>>script.sh
 echo 'convert_biom.py -i otu_table.biom -o otu_table.txt -b --header_key taxonomy --output_metadata_id "ConsensusLineage"'>>script.sh
 echo '#convert_biom.py -i otu_table.biom -o otu_table2.txt -b --header_key taxonomy'>>script.sh
-else
-echo "Step 1 not found";
-fi
-
-if [ $ANALYSIS_STEPS -eq 123 ] || [ $ANALYSIS_STEPS -eq 23 ] || [ $ANALYSIS_STEPS -eq 2 ] ; then
-echo "steps 2";
-
-echo -e "#---------------------Align/filter/tree--------------------#\n">>script.sh
-
-echo -e "#Analysis Step 2\n">>script.sh
-echo 'align_seqs.py -i seqs.fna_rep_set.fasta -e 80 -v'>>script.sh
-echo 'filter_alignment.py -i pynast_aligned/seqs.fna_rep_set_aligned.fasta -v -o filtered_alignment'>>script.sh
-echo 'make_phylogeny.py -i filtered_alignment/seqs.fna_rep_set_aligned_pfiltered.fasta -v -o phylogeny.tre'>>script.sh
-echo -e "#'''''''''''''''''''''''''''''''''''''''''''''''''''#\n">>script.sh
-
-else
-echo "Step 2 not found";
-fi
-
-
-if [ $ANALYSIS_STEPS -eq 123 ] || [ $ANALYSIS_STEPS -eq 23 ] || [ $ANALYSIS_STEPS -eq 3 ]; then
-echo "steps 3";
-
-echo -e "#Analysis Step 3\n">>script.sh
-
-echo -e "#---------------------Alpha div---------------------#\n">>script.sh
-
-echo '# calculate the alpha div for given matrices : chao1,observed_species,PD_whole_tree,shannon,simpson'>>script.sh
-echo -e "alpha_diversity.py -i otu_table.biom -o alpha_div.txt -m chao1,observed_species,PD_whole_tree,shannon,simpson -t phylogeny.tre\n">>script.sh
-
-echo "# Create a parameters files and run alpha diversity through plots">>script.sh
-echo 'echo "alpha_diversity:metrics shannon,simpson,PD_whole_tree,chao1,observed_species" > alpha_params.txt'>>script.sh
-echo -e "alpha_rarefaction.py -i otu_table.biom -p alpha_params.txt -m mapping.txt -o alpha_rarefac -v -t phylogeny.tre\n">>script.sh
-
-echo -e "#'''''''''''''''''''''''''''''''''''''''''''''''''''#\n">>script.sh
-
-
-echo -e "#---------------------Beta div---------------------#\n">>script.sh
-
-echo '# calculate beta div values for given three matrices : bray_curtis,unweighted_unifrac,weighted_unifrac'>>script.sh
-echo -e "beta_diversity.py -i otu_table_keep_even.biom -m bray_curtis,unweighted_unifrac,weighted_unifrac -o beta_div_matrices_keep -t phylogeny.tre\n">>script.sh
-
-echo '#create a rarified OTU table (usually select the sample size lowest among all the samples)'>>script.sh
-echo "#replace the -d number with your choice (otherwise default minimum called "EVEN" is calculated from otu_table.stats">>script.sh
-EVEN=$(cat otu_table.stats |head -13|tail -1|cut -d : -f 2|cut -d . -f 1| cut -d ' ' -f 2)
-echo -e "single_rarefaction.py -i otu_table.biom -o otu_table_even.biom -d $EVEN\n">>script.sh
-
-echo '#Create a parameters files and run beta diversity through plots'>>script.sh
-echo 'echo "beta_diversity:metrics  bray_curtis,unweighted_unifrac,weighted_unifrac" > beta_params.txt'>>script.sh
-echo -e "beta_diversity_through_plots.py -i otu_table_even.biom -m mapping.txt -p beta_params.txt -o beta_div_even -v -t phylogeny.tre\n">>script.sh
-
-echo -e "#'''''''''''''''''''''''''''''''''''''''''''''''''''#\n">>script.sh
-
-
-
-echo -e "#---------------------Jack Knife---------------------#\n">>script.sh
-
-echo "#for jacknife the value for -e should be 75% of $EVEN">>script.sh
-let EVEN_JACK=$EVEN*75/100
-echo -e "#jackknifed_beta_diversity.py -i otu_table.txt -m mapping.txt -o beta_jacknife -e $EVEN_JACK -t phylogeny.tre\n">>script.sh
-echo -e "#''''''''''''''''''''''''''''''''''''''''''''''''''''#\n">>script.sh
-
-
-else
-echo "Step 3 not found";
-fi
-
-
-
-
-
-
-
-
-
-
 

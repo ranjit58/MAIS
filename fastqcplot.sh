@@ -1,3 +1,3 @@
-R CMD BATCH ~/workdir/my-scripts/cheaha/fastqcplot.R
+R CMD BATCH ~/my-scripts/MAIS/fastqcplot.R
 rm fastqcplot.Rout
 rm .RData

@@ -15,52 +15,6 @@ cp ~/my-scripts/MAIS/q.jpg report_files/
 
 
 #----------Start:Report Overview-------------------#
-cat <<EOF >microbiome_report_temp.html
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-  <meta content="text/html; charset=ISO-8859-1"
- http-equiv="content-type">
-  <title>microbiome_results</title>
-</head>
-<body
- style="background-color: white; width: 1200px; color: rgb(0, 0, 0);"
- alink="#ee0000" link="#0000ee" vlink="#551a8b">
-&nbsp;
-<h1
- style="text-align: center; font-weight: normal; margin-left: 40px; color: white; background-color: rgb(102, 102, 102);"><a
- name="Index"></a>Microbiome
-Analysis Results</h1>
-<br><div style="margin-left: 40px;">
-<h2><span style="font-weight: normal;">Index</span></h2>
-</div>
-<ol style="margin-left: 40px; background-color: white;">
-  <li style="width: 1200px;"><a href="report_files/initial_overview.html">Initial Sequence Overview</a></li>
-  <li style="width: 1200px;"><a href="report_files/quality_control.html">Quality Control</a></li>
-  <li style="width: 1200px;"><a href="report_files/sample_mapping.html">Sample selected for analysis and mapping information</a></li>
-  <li style="width: 1200px;"><a href="report_files/summarize_taxonomy.html">Summarize OTUs by Taxonomic distrubution</a></li>
-  <li style="width: 1200px;"><a href="report_files/alpha_diversity.html">Diversity within a sample (Alpha Diversity)</a></li>
-  <li style="width: 1200px;"><a href="report_files/beta_diversity.html">Diversity between samples (Beta Diversity)</a></li>
-  <li style="width: 1200px;"><a href="report_files/advance_analysis.html">Further advanced analysis and statistical tests</a></li>
-  <li style="width: 1200px;"><a href="report_files/references_faqs.html">References and FAQs</a></li>
-</ol>
-<br>
-<div style="margin-left: 40px;">
-<img style="width: 32px; height: 32px;" alt=""
- src="report_files/arrow.png" align="middle"> &nbsp;This icon
-brings you to the top index page.<br>
-<img style="width: 35px; height: 35px;" alt=""
- src="report_files/q.jpg" align="middle"> This will open the help
-page for that topic (if any)<br>
-<img style="width: 35px; height: 35px;" alt=""
- src="report_files/oinw.gif" align="middle"> This
-will open the webpage or graphs in a new browser tab/window<br>
-</div>
-<br>
-<br>
-
-EOF
-
 cat <<EOF >microbiome_report.html
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
@@ -99,10 +53,16 @@ Control</a></p>
  href="report_files/sample_mapping.html">Sample
 selected for analysis and mapping information</a></p>
   </li>
+<li>
+    <p><a target="_blank"
+ href="report_files/results_otu.html">Results: OTU table, 16S Sequence and Taxonomic Identification</a></p>
+  </li>
+
   <li>
     <p><a target="_blank" 
  href="report_files/summarize_taxonomy.html">Summarize
-OTUs by Taxonomic distrubution</a></p>
+OTUs by Taxonomic distrubution</a> (<a target="_blank"
+ href="report_files/summarize_taxonomy_trimmed.html">Trimmed Version</a>) </p>
   </li>
   <li>
     <p><a target="_blank" 
@@ -413,6 +373,123 @@ EOF
 
 
 
+#----------Start:Results: OTU table,16S Sequence and Taxonomic Identification---#
+cat <<EOF >report_files/results_otu.html
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="content-type">
+  <title>Results: OTU table, 16S Sequence and Taxonomic Identification</title>
+</head>
+<body
+ style="background-color: white; width: 1200px; color: rgb(0, 0, 0);"
+ alink="#ee0000" link="#0000ee" vlink="#551a8b">
+<span style="font-family: Verdana;"></span><br
+ style="font-family: Verdana;">
+<br style="font-family: Verdana;">
+<div style="margin-left: 40px; font-family: Verdana;"><span
+ style="color: black;"></span>
+<table style="text-align: left; width: 1160px; height: 54px;"
+ border="0" cellpadding="0" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style="color: white;">
+      <h2
+ style="background-color: rgb(102, 102, 102); font-weight: normal;">&nbsp;
+Results: OTU table,16S Sequence and Taxonomic Identification</h2>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<span style="color: black;">The term OTU stands for
+Operational Taxonomic Unit. Traditionally, In 16S sequencing using 454
+technology (produces&nbsp;reads of length 200 ~ 500 bases)&nbsp;
+the reads which are very similar in sequence (~97%) are clustered
+together and the most abundunt sequence of the cluster is selected and
+called OTU. This OTU sequence and the abundance information proceeds
+futher in the analysis. It is found in the literature that at if 16S
+sequences are clustered with 97% identity, the resulting clusters
+(OTUs) may be the representative of species. This wil help us to merge
+strain level differences and also take care of very small
+mistakes&nbsp;associated with sequencing technology.<br>
+<br>
+When talking about Illumina sequence technology, the read length is
+around 100 bases. It seems that when these sequences are clustered at 97%
+identity, we may end up merging not only strains but may be different species
+too.<br>
+<br>
+So, here (Illumina daataset) we don't take the traditional approach. We  merge only 16S sequences which are 100% identical and create OTUs.
+This will help us to have accurate identification and abunduance
+information of all 16S sequences present in the sample. Taxomonic
+identification of these&nbsp;OTU sequences were done using BLAST
+searches against <a
+ href="http://qiime.org/home_static/dataFiles.html"
+ target="_blank">Greengenes 16S databases</a>. Very low abundunt OTUs (with count <10) are filtered out.<br>
+<br>
+<span style="font-weight: bold; color: rgb(153, 0, 0);">Download
+the raw dataset</span> (tab delimited text format)<br>
+</span>
+<ol>
+  <li><a href="../otu_table.txt" target="_blank">OTU table</a>
+- This file has the&nbsp;list of all OTUs identified in the current
+analysis. It also include the raw count of reads for each OTU in 
+each sample. Each OTU has the taxonomic information identified.
+Note: Different samples may have different read depth, and the numbers
+presented here are not normalized for differences in read depth. This
+means that these numbers can't be used directly for any statistical
+comparision. This file is also present in <a
+ href="../otu_table.biom" target="_blank">.biom format</a>.</li>
+  <li><a href="../seqs.fna_rep_set.fasta"
+ target="_blank">OTU
+fasta sequence</a> - This file has list of all OTU
+sequences present in the OTU table.</li>
+  <li>OTU table (Normalized) - The OTU table present above
+is normalised (converted into proportion) and the sequence information
+is also merged into it.(NOT ACTIVE YET)</li>
+  <li><a href="../phylogeny.tre" target="_blank">OTU
+phylogenetic tree</a> - The phylogenetic tree of all OTUs.</li>
+</ol>
+<br>
+<span style="font-weight: bold; color: rgb(153, 0, 0);"><br>
+Download the filtered dataset</span><br>
+<ol>
+  <li>Top 50 most abundunat OTUs - The top 50 most abundunt OTUs
+selected from file OTU table (Normalized).(NOT ACTIVE YET)</li>
+</ol>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+</div>
+</body>
+</html>
+
+EOF
+
+
+
+
+
+#----------End:Results: OTU table,16S Sequence and Taxonomic Identification---#
+
+
+
+
+
 #----------Start:Summarize taxonomy ------------------------------#
 
 cat <<EOF >report_files/summarize_taxonomy.html
@@ -452,47 +529,30 @@ are presented at different taxonomic levels like kingdom, phylum,
 class, order, family.</p>
 <p>Inside the plots, use mouse to view the taxonomic composition
 of microbiome.&nbsp;</p>
-<p>The identification like <span style="font-weight: bold;">"</span><span
- style="color: black;"><span style="font-weight: bold;">Root;k__Bacteria;p__Actinobacteria;c__Actinobacteria;o__Rubrobacterales;f__Rubrobacteraceae"</span>
-means that it belongs to knigdom - bacteria, phylum - Actinobacteria,
+<p>The identification like ">Root;k__Bacteria;p__Actinobacteria;c__Actinobacteria;o__Rubrobacterales;f__Rubrobacteraceae" means that it belongs to knigdom - bacteria, phylum - Actinobacteria,
 class - Actinobacteria, order - Rubrobacterales and family -
-Rubrobacteraceae.</span>
-<h3 style="font-weight: bold; text-align: center;"><span
- style="color: rgb(153, 0, 0);">Bar Plot of Taxonomic
-distribution &nbsp;&nbsp;<a
- href="../taxa_summary/taxa_summary_plots/bar_charts.html"
- target="_blank"><img
- style="border: 0px solid ; width: 36px; height: 36px;"
- alt="open_in_new_window" src="oinw.gif"></a>
-</span></h3>
-<iframe
- style="border: 2px solid rgb(0, 0, 0); width: 100%; height: 700px;"
- src="../taxa_summary/taxa_summary_plots/bar_charts.html"
- scrolling="auto"></iframe><br>
-<br>
-<br>
-<br>
-<h3 style="font-weight: bold; text-align: center;"><span
- style="color: rgb(153, 0, 0);">Area Plot of Taxonomic
-distribution &nbsp;<a
+Rubrobacteraceae.</span></p>
+<p><span style="font-weight: bold;"><span
+ style="color: rgb(153, 0, 0);"></span></span></p></br>
+<p><span style="font-weight: bold;"><span
+ style="color: rgb(153, 0, 0);">Taxonomic
+distribution plots</span> </span></p>
+<p><a href="../taxa_summary/taxa_summary_plots/bar_charts.html"
+ target="_blank">Bar Plot of Taxonomic
+distribution</a></p>
+<p><a
  href="../taxa_summary/taxa_summary_plots/area_charts.html"
- target="_blank"><img
- style="border: 0px solid ; width: 36px; height: 36px;"
- alt="open_in_new_window" src="oinw.gif"></a>
-</span></h3>
-<iframe
- style="border: 2px solid rgb(0, 0, 0); width: 100%; height: 700px;"
- src="../taxa_summary/taxa_summary_plots/area_charts.html"
- scrolling="auto"></iframe><br>
+ target="_blank">Area
+Plot of Taxonomic
+distribution</a> &nbsp;
+<br>
+</p>
 <br>
 <br>
-<br>
-<br>
-
-
-
-<br></br></br>
-Dowload the raw dataset used for generating Taxonomy plots (tab delimited format, right click -> save link as)<br>
+<span style="font-weight: bold; color: rgb(153, 0, 0);">Dowload
+the raw dataset
+used for generating Taxonomy plots</span> (tab
+delimited format, right click -&gt; save link as)<br>
 <ol>
   <li> <a href="../taxa_summary/otu_table_L2.txt" target="_blank">OTU table Level2</a> </li>
   <li> <a href="../taxa_summary/otu_table_L3.txt" target="_blank">OTU table Level3</a> </li>
@@ -504,6 +564,81 @@ Dowload the raw dataset used for generating Taxonomy plots (tab delimited format
 EOF
 #----------End:Summarize taxonomy ------------------------------#
 
+#----------Start:Summarize taxonomy (trimmed version) ------------------------------#
+
+cat <<EOF >report_files/summarize_taxonomy_trimmed.html
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="content-type">
+  <title>Summarize OTUs by Taxonomic distrubution (trimmed)</title>
+</head>
+<body
+ style="background-color: white; width: 1200px; color: rgb(0, 0, 0);"
+ alink="#ee0000" link="#0000ee" vlink="#551a8b">
+<span style="font-family: Verdana;"></span><br
+ style="font-family: Verdana;">
+<br style="font-family: Verdana;">
+<div style="margin-left: 40px; font-family: Verdana;"><span
+ style="color: black;"></span>
+<table style="text-align: left; width: 1160px; height: 54px;"
+ border="0" cellpadding="0" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style="color: white;">
+      <h2
+ style="background-color: rgb(102, 102, 102); font-weight: normal;"><a
+ name="Summarize OTUs by Taxonomic distrubution (trimmed)"></a> &nbsp; Summarize taxonomies by Taxonomic distrubution (trimmed version)</h2>
+      </td>
+    </tr>
+  </tbody>
+</table>
+This taxonomic distribution is trimmed version of original taxonomic distribution. Here, any taxonomic categories which has abundunce < 0.1% (in all samples) has been trimmed off (to filter very rare taxons).</br></br>
+Summarize
+Communities by Taxonomic Composition : Here the&nbsp;OTUs having
+similar taxonomic composition are grouped together for all samples
+and the results are presented as bar chart and area chart. The charts
+are presented at different taxonomic levels like kingdom, phylum,
+class, order, family.</p>
+<p>Inside the plots, use mouse to view the taxonomic composition
+of microbiome.&nbsp;</p>
+<p>The identification like ">Root;k__Bacteria;p__Actinobacteria;c__Actinobacteria;o__Rubrobacterales;f__Rubrobacteraceae" means that it belongs to knigdom - bacteria, phylum - Actinobacteria,
+class - Actinobacteria, order - Rubrobacterales and family -
+Rubrobacteraceae.</span></p>
+<p><span style="font-weight: bold;"><span
+ style="color: rgb(153, 0, 0);"></span></span></p></br>
+<p><span style="font-weight: bold;"><span
+ style="color: rgb(153, 0, 0);">Taxonomic
+distribution plots</span> </span></p>
+<p><a href="../taxa_summary_trim/taxa_summary_plots/bar_charts.html"
+ target="_blank">Bar Plot of Taxonomic
+distribution</a></p>
+<p><a
+ href="../taxa_summary_trim/taxa_summary_plots/area_charts.html"
+ target="_blank">Area
+Plot of Taxonomic
+distribution</a> &nbsp;
+<br>
+</p>
+<br>
+<br>
+<span style="font-weight: bold; color: rgb(153, 0, 0);">Dowload
+the raw dataset
+used for generating Taxonomy plots</span> (tab
+delimited format, right click -&gt; save link as)<br>
+<ol>
+  <li> <a href="../taxa_summary_trim/otu_table_L2.txt" target="_blank">OTU table Level2</a> </li>
+  <li> <a href="../taxa_summary_trim/otu_table_L3.txt" target="_blank">OTU table Level3</a> </li>
+  <li> <a href="../taxa_summary_trim/otu_table_L4.txt" target="_blank">OTU table Level4</a> </li>
+  <li> <a href="../taxa_summary_trim/otu_table_L5.txt" target="_blank">OTU table Level5</a> </li>
+  <li> <a href="../taxa_summary_trim/otu_table_L6.txt" target="_blank">OTU table Level6</a> </li>
+</ol>
+</div>
+EOF
+#----------End:Summarize taxonomy (trimmed) ------------------------------#
+ 
+
 
 
 #----------Start:Alpha diversity--------------------------------#
@@ -514,7 +649,7 @@ cat <<EOF >report_files/alpha_diversity.html
 <head>
   <meta content="text/html; charset=ISO-8859-1"
  http-equiv="content-type">
-  <title>Sample selected and mapping information</title>
+  <title>Diversity within a sample (Alpha Diversity)</title>
 </head>
 <body
  style="background-color: white; width: 1200px; color: rgb(0, 0, 0);"
@@ -567,24 +702,47 @@ approximate number of different species.<br>
 This rarefaction curve is dynamic in nature, please select a metric
 type and category to view the results.<br>
 <br>
-<h3 style="font-weight: bold; text-align: center;"><span
- style="color: rgb(153, 0, 0);">Rarefaction
-curve&nbsp;&nbsp;<a
+<a
  href="../alpha_rarefac/alpha_rarefaction_plots/rarefaction_plots.html"
- target="_blank"><img
- style="border: 0px solid ; width: 36px; height: 36px;"
- alt="open_in_new_window" src="oinw.gif"></a>
-</span></h3>
-<iframe
- style="border: 2px solid rgb(0, 0, 0); width: 100%; height: 700px;"
- src="../alpha_rarefac/alpha_rarefaction_plots/rarefaction_plots.html"
- scrolling="auto"></iframe><br>
+ target="_blank">View the Rarefaction
+curve</a></span>&nbsp;&nbsp;
+</span><br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 <br>
 <br>
 <br>
 <br>
 <br>
 </div>
+</body>
+</html>
+
+
+
 EOF
 
 #----------End:Alpha Diversity ------------------------------#
@@ -706,7 +864,7 @@ cat <<EOF >report_files/beta_diversity.html
 <head>
   <meta content="text/html; charset=ISO-8859-1"
  http-equiv="content-type">
-  <title>Sample selected and mapping information</title>
+  <title>Diversity between samples (Beta Diversity)</title>
 </head>
 <body
  style="background-color: white; width: 1200px; color: rgb(0, 0, 0);"
@@ -737,7 +895,7 @@ calculates a distance between a pair of samples. &nbsp;If you have
 many
 samples (for example 3 control and 3 treatment), a beta diversity
 metric will return a matrix of the distances of all samples to all
-other samples. <br>
+other samples. <br><br>
 Here three different matrices are used (bray-curtis, unweighted unifrac and weighted unnifrac) to measure
 diversity.<br>
 UniFrac is a method to calculate a distance measure between bacterial
@@ -750,21 +908,20 @@ and their phylogenetic distances.
 <ol>
 </ol>
 Beta divesity was calculated for all three diversity matrices mentioned
-above and organised in form of a table (column represent different
-diversity matrice and rows represent sample name).<br>
+above and organised in form of a matrix table.<br>
 <br style="color: rgb(102, 0, 0);">
 <span style="font-weight: bold; color: rgb(153, 0, 0);">Results
 in tabular format</span> [The files are tab delimited and can be viewed using excel]
 <span style="text-decoration: underline;"><span
  style="font-weight: bold;"></span></span><br>
 <ol>
-  <li><a href="../beta_div_even/bray_curtis_otu_table_even.txt">Bray-curtis
+  <li><a href="../beta_div_matrices/bray_curtis_otu_table_even.txt">Bray-curtis
 diversity</a></li>
   <li><a
- href="../beta_div_even/unweighted_unifrac_otu_table_even.txt">Unweighted
+ href="../beta_div_matrices/unweighted_unifrac_otu_table_even.txt">Unweighted
 Unifrac</a></li>
   <li><a
- href="../beta_div_even/weighted_unifrac_otu_table_even.txt">Weighted
+ href="../beta_div_matrices/weighted_unifrac_otu_table_even.txt">Weighted
 Unifrac</a></li>
 </ol>
 <br style="color: rgb(153, 0, 0);"></br></br>
@@ -775,8 +932,9 @@ Here principle coordinate analysis (PCoA) are used to vizualize
 the distances between the sample. PCoA are used to vizualize
 the distances between the samples in a 2D plot and 3D plot. In the table "dm" stands for distance matrix and "pc" stands for principal component file used for generating plots. Both 2D and 3D plots are calculated as continuous and discrete. 3D plot requires JAVA.<br>
 <br>
-<table style="text-align: left; width: 100%;" border="1"
- cellpadding="2" cellspacing="2">
+<table
+ style="text-align: left; background-color: rgb(246, 246, 246); width: 100%;"
+ border="1" cellpadding="5" cellspacing="2">
   <tbody>
     <tr>
       <td style="font-weight: bold;">Beta Diversity
