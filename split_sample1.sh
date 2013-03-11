@@ -7,9 +7,9 @@
 
 # -----------Please edit the following filename and path information--------------------------
 # PATH for RAW data
-DIR='R9_raw_data_dk'
+DIR='R7_raw_data_dk'
 # Mapping file name
-MAP='R9_mapping.txt'
+MAP='R7_mapping.txt'
 
 #--no need to edit--
 TMP='TEMP_ALL_FASTQ'

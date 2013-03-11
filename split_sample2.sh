@@ -9,11 +9,11 @@
 # PATH for RAW data
 DIR_RAW='TEMP_ALL_FASTQ'
 # Mapping file name
-MAP='R9_mapping.txt'
+MAP='R7_mapping.txt'
 
-DIR_MAPPED='R8_raw_data_mapped'
+DIR_MAPPED='R7_raw_data_mapped'
 
-DIR_ANALYSIS='R9_analysis'
+DIR_ANALYSIS='R7_analysis'
 #---------------------------------------------------------------------------
 mkdir $DIR_MAPPED
 mkdir $DIR_ANALYSIS
